@@ -13,13 +13,18 @@ def load_data(path,target,train_size):
 
 
 
-def plot_data(x:np.array,y:np.array,xlable:str,ylable:str,lable1:str,lable2:str):
-    pos=y==1
-    neg=y==0
-    plt.scatter(x[pos,0],x[pos,1],c="g",marker="o")
-    plt.scatter(x[neg,0],x[neg,1],c="r",marker="x")
-    plt.xlabel(xlable)
-    plt.ylabel(ylable)
-    plt.legend([lable1,lable2])
+def plot_data(model:str,x:np.array,y:np.array,xlable:str,ylable:str,lable1=None,lable2=None):
+    if model=="LogisticRegression":
+        pos=y==1
+        neg=y==0
+        plt.scatter(x[pos,0],x[pos,1],c="g",marker="o")
+        plt.scatter(x[neg,0],x[neg,1],c="r",marker="x")
+        plt.xlabel(xlable)
+        plt.ylabel(ylable)
+        plt.legend([lable1,lable2])
+    elif model=="LinearRegression":
+        plt.scatter(x,y,c="r",marker="X")
+        plt.xlabel(xlable)
+        plt.ylabel(ylable)
     plt.show()
     
