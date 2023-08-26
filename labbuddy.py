@@ -42,7 +42,7 @@ def map_feature(x1, x2):
 
 
 def plot_decision_boundary(w, b, x, y,xlable:str,ylable:str,lable1:str,lable2:str,show:bool):
-    plot_data(x[:, 0:2], y)
+    plot_data(x[:, 0:2], y,xlable,ylable,lable1,lable2,False)
     if x.shape[1] <= 2:
         plot_x = np.array([min(x[:, 0]), max(x[:, 0])])
         plot_y = (-1. / w[1]) * (w[0] * plot_x + b)
