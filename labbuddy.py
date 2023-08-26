@@ -3,25 +3,26 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-def load_data(path:str,neglect_feature:list,target:list,train_size:float):
+def load_data(path:str,target:str,train_size:float,neglect_feature:list):
     data=pd.read_csv(path)
     len=data.shape[0]
-    features=[i for i in data.columns if i not in target and neglect_feature]
+    features=[i for i in data.columns if i not in target if i not in neglect_feature ]
     x1,y1=np.array(data.loc[:len*train_size][features]),np.array(data.loc[:len*train_size]["Admitted"])
     x2,y2=np.array(data.loc[:len*(1-train_size)][features]),np.array(data.loc[:len*(1-train_size)]["Admitted"])
     return x1,x2,y1,y2
 
 
 
-def plot_data(x:np.array,y:np.array,xlable:str,ylable:str,lable1:str,lable2:str):
+def plot_data(x:np.array,y:np.array,xlable:str,ylable:str,lable1:str,lable2:str,show:bool):
     pos=y==1
     neg=y==0
     plt.scatter(x[pos,0],x[pos,1],c="g",marker="o")
     plt.scatter(x[neg,0],x[neg,1],c="r",marker="x")
-    plt.xlabel(xlable)
-    plt.ylabel(ylable)
-    plt.legend([lable1,lable2])
-    plt.show()
+    if show==True:
+        plt.xlabel(xlable)
+        plt.ylabel(ylable)
+        plt.legend([lable1,lable2])
+        plt.show()
 
 
 def sigmoid(z):
@@ -40,7 +41,7 @@ def map_feature(x1, x2):
     return np.stack(out, axis=1)
 
 
-def plot_decision_boundary(w, b, x, y):
+def plot_decision_boundary(w, b, x, y,xlable:str,ylable:str,lable1:str,lable2:str,show:bool):
     plot_data(x[:, 0:2], y)
     if x.shape[1] <= 2:
         plot_x = np.array([min(x[:, 0]), max(x[:, 0])])
@@ -55,5 +56,8 @@ def plot_decision_boundary(w, b, x, y):
                 z[i,j] = sigmoid(np.dot(map_feature(u[i], v[j]), w) + b)     
         z = np.transpose(z)
         plt.contour(u,v,z, levels = [0.5], colors="g")
-
-# x,y,_,_=load_data("data/ex2data1.txt")
+    if show==True:
+        plt.xlabel(xlable)
+        plt.ylabel(ylable)
+        plt.legend([lable1,lable2])
+        plt.show()
