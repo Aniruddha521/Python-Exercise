@@ -59,5 +59,5 @@ def plot_decision_boundary(w, b, x, y,xlable:str,ylable:str,lable1:str,lable2:st
     if show==True:
         plt.xlabel(xlable)
         plt.ylabel(ylable)
-        plt.legend(["Decision boundary",lable2,lable1,])
+        plt.legend(["Decision boundary",lable1,lable2])
         plt.show()
