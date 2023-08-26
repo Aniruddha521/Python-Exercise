@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-def load_data(path,target,train_size):
+def load_data(path:str,neglect_feature:list,target:list,train_size:float):
     data=pd.read_csv(path)
     len=data.shape[0]
-    features=[i for i in data.columns if i not in target]
+    features=[i for i in data.columns if i not in target and neglect_feature]
     x1,y1=np.array(data.loc[:len*train_size][features]),np.array(data.loc[:len*train_size]["Admitted"])
     x2,y2=np.array(data.loc[:len*(1-train_size)][features]),np.array(data.loc[:len*(1-train_size)]["Admitted"])
     return x1,x2,y1,y2
@@ -22,4 +22,38 @@ def plot_data(x:np.array,y:np.array,xlable:str,ylable:str,lable1:str,lable2:str)
     plt.ylabel(ylable)
     plt.legend([lable1,lable2])
     plt.show()
-    
+
+
+def sigmoid(z):
+    val=1+np.exp(-z)
+    g=1/val
+    return g
+
+def map_feature(x1, x2):
+    x1 = np.atleast_1d(x1)
+    x2 = np.atleast_1d(x2)
+    degree = 6
+    out = []
+    for i in range(1, degree+1):
+        for j in range(i + 1):
+            out.append((x1**(i-j) * (x2**j)))
+    return np.stack(out, axis=1)
+
+
+def plot_decision_boundary(w, b, x, y):
+    plot_data(x[:, 0:2], y)
+    if x.shape[1] <= 2:
+        plot_x = np.array([min(x[:, 0]), max(x[:, 0])])
+        plot_y = (-1. / w[1]) * (w[0] * plot_x + b)
+        plt.plot(plot_x, plot_y, c="b")
+    else:
+        u = np.linspace(-1, 1.5, 50)
+        v = np.linspace(-1, 1.5, 50)
+        z = np.zeros((len(u), len(v)))
+        for i in range(len(u)):
+            for j in range(len(v)):
+                z[i,j] = sigmoid(np.dot(map_feature(u[i], v[j]), w) + b)     
+        z = np.transpose(z)
+        plt.contour(u,v,z, levels = [0.5], colors="g")
+
+# x,y,_,_=load_data("data/ex2data1.txt")
